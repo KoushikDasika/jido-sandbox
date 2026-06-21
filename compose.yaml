@@ -11,6 +11,7 @@ services:
     network_mode: host
     volumes:
       - ./lib:/app/lib:cached
+      - ./deps:/app/deps:cached
       - ./config:/app/config:cached
       - ./notebooks:/app/notebooks:cached
       - ./priv:/app/priv:cached

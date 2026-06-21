@@ -41,6 +41,7 @@ defmodule JidoSandboxWeb do
   def live_view do
     quote do
       use Phoenix.LiveView
+      use Phoenix.Component
       unquote(html_helpers())
     end
   end

@@ -19,6 +19,7 @@ defmodule JidoSandboxWeb.Router do
 
     live_session :default do
       live "/", HomeLive
+      live "/leaderboard", PriceLive
     end
   end
 end

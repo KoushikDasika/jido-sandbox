@@ -11,6 +11,10 @@ defmodule JidoSandboxWeb.Endpoint do
   socket "/live", Phoenix.LiveView.Socket,
     websocket: [connect_info: [session: @session_options]]
 
+  socket "/c", JidoSandboxWeb.Socket,
+    websocket: [connect_info: [session: @session_options]],
+    join_timeout: 30_000
+
   if code_reloading? do
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
     plug Phoenix.LiveReloader
