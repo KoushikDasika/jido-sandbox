@@ -30,8 +30,15 @@ defmodule JidoSandbox.LLM do
   Send a plain-text prompt to the local LLM. Returns `{:ok, text}` or `{:error, reason}`.
   """
   def ask(prompt) when is_binary(prompt) do
-    ensure_key()
-    ReqLLM.generate_text(model(), prompt)
+    model =
+      ReqLLM.model!(%{
+        id: model_id(),
+        provider: :openai,
+        base_url: base_url(),
+        extra: %{openai_compatible_backend: :ollama}
+      })
+
+    ReqLLM.generate_text!(model, "sing a song")
   end
 
   # --- private helpers ---

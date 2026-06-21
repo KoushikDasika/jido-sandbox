@@ -29,3 +29,4 @@ jido_sandbox-*.tar
 .elixir_ls/
 .lexical/
 
+.opencode/

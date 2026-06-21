@@ -12,7 +12,7 @@ defmodule JidoSandbox do
       :world
 
   """
-  def hello do
-    :world
+  def run do
+    JidoSandbox.LLM.ask("Hello, how are you?")
   end
 end

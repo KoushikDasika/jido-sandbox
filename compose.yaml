@@ -7,6 +7,7 @@ services:
       LLM_BASE_URL: http://host.docker.internal:8080/v1
       LLM_MODEL: unsloth/Qwen3.6-35B-A3B-MTP-GGUF:UD-Q4_K_XL
       OPENAI_API_KEY: local-dummy
+    network_mode: host
     volumes:
       - .:/app
       - app-deps:/app/deps
@@ -41,3 +42,9 @@ volumes:
   mix-cache: {}
   build-cache: {}
   deps-cache: {}
+networks:
+  jido-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.200.0.0/24
