@@ -6,7 +6,7 @@
 FROM hexpm/elixir:1.19.5-erlang-28.1.1-ubuntu-resolute-20260610
 
 RUN apt-get update && apt-get install -y git ca-certificates build-essential make curl libcap-dev && \
-    rm -rf /var/lib/apt/lists/*
+  rm -rf /var/lib/apt/lists/*
 
 RUN useradd -m elixir
 
@@ -18,8 +18,10 @@ ENV SHELL=/bin/bash
 
 COPY mix.exs mix.lock ./
 RUN mix local.hex --force && \
-    mix local.rebar --force && \
-    mix deps.get
+  mix local.rebar --force && \
+  mix deps.get
+
+RUN mix jido_browser.install agent_browser
 
 COPY lib/ lib/
 COPY config/ config/
