@@ -30,3 +30,8 @@ jido_sandbox-*.tar
 .lexical/
 
 .opencode/
+
+# Beads / Dolt files (added by bd init)
+.dolt/
+*.db
+.beads-credential-key

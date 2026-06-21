@@ -5,9 +5,16 @@
 
 FROM hexpm/elixir:1.19.5-erlang-28.1.1-ubuntu-resolute-20260610
 
-RUN apt-get update && apt-get install -y git ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y git ca-certificates build-essential make curl libcap-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN useradd -m elixir
 
 WORKDIR /app
+RUN chown elixir:elixir /app
+
+USER elixir
+ENV SHELL=/bin/bash
 
 COPY mix.exs mix.lock ./
 RUN mix local.hex --force && \
@@ -19,5 +26,6 @@ COPY config/ config/
 COPY notebooks/ notebooks/
 
 RUN mix deps.get
+RUN mix compile
 
 CMD ["mix", "run", "--no-halt"]

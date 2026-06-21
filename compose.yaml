@@ -9,8 +9,9 @@ services:
       OPENAI_API_KEY: local-dummy
     network_mode: host
     volumes:
-      - .:/app
-      - app-deps:/app/deps
+      - ./lib:/app/lib:cached
+      - ./config:/app/config:cached
+      - ./notebooks:/app/notebooks:cached
     depends_on:
       - livebook
 

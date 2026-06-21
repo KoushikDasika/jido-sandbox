@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "server",
+  "dolt_database": "jido_sandbox",
+  "project_id": "e97f7d4f-e16d-49b0-aadd-4a8030c1b953"
+}
