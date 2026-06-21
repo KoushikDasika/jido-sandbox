@@ -24,6 +24,9 @@ defmodule JidoSandbox.MixProject do
       {:jido, "~> 2.3"},
       {:jido_ai, "~> 2.2"},
       {:req_llm, "~> 1.15"},
+      {:jido_browser, "~> 2.1"},
+      {:light_cdp, "~> 0.2.1"},
+      {:lightpanda_ex, "~> 0.1.0"},
       {:kino, "~> 0.14"}
     ]
   end
