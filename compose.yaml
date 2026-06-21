@@ -1,0 +1,43 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    environment:
+      LLM_BASE_URL: http://host.docker.internal:8080/v1
+      LLM_MODEL: unsloth/Qwen3.6-35B-A3B-MTP-GGUF:UD-Q4_K_XL
+      OPENAI_API_KEY: local-dummy
+    volumes:
+      - .:/app
+      - app-deps:/app/deps
+    depends_on:
+      - livebook
+
+  livebook:
+    # Official Livebook 0.19.8 image (Elixir 1.19.3 / OTP 28.1.1).
+    image: ghcr.io/livebook-dev/livebook:0.19.8
+    # LLM binds to 127.0.0.1:8080 — host.docker.internal won't reach it.
+    # network_mode: host shares the host network so localhost:8080 works directly.
+    # Livebook uses port 8081 to avoid colliding with the LLM on 8080.
+    network_mode: host
+    environment:
+      LIVEBOOK_PORT: 4040
+      LIVEBOOK_PASSWORD: ${LIVEBOOK_PASSWORD:-jidosandbox123}
+      LIVEBOOK_HOME: /data
+      OPENAI_API_KEY: local-dummy
+      LLM_BASE_URL: http://localhost:8080/v1
+      LLM_MODEL: unsloth/Qwen3.6-35B-A3B-MTP-GGUF:UD-Q4_K_XL
+    volumes:
+      # Mount project root as Livebook home so notebooks and mix project are visible
+      - .:/data
+      # Persistent cache volumes so deps/builds survive container restarts
+      - mix-cache:/home/livebook/.mix
+      - build-cache:/data/_build
+      - deps-cache:/data/deps
+
+volumes:
+  app-deps: {}
+
+  mix-cache: {}
+  build-cache: {}
+  deps-cache: {}

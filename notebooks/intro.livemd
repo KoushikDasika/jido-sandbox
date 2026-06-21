@@ -1,0 +1,72 @@
+# Intro: req_llm → Local LLM
+
+```elixir
+Mix.install([
+  {:req_llm, "~> 1.15"},
+  {:kino, "~> 0.14"},
+  {:jido, "~> 2.3"},
+  {:jido_ai, "~> 2.2"}
+])
+```
+
+## 1. Configure
+
+Read LLM connection details from the environment variables injected by compose.yaml.
+
+```elixir
+base_url = System.get_env("LLM_BASE_URL") || "http://localhost:8080/v1"
+model_id  = System.get_env("LLM_MODEL")    || "unsloth/Qwen3.6-35B-A3B-MTP-GGUF:UD-Q4_K_XL"
+
+# Local servers don't validate the key; any non-empty string keeps req_llm happy.
+ReqLLM.put_key(:openai_api_key, System.get_env("OPENAI_API_KEY") || "local-dummy")
+
+Kino.Markdown.new("""
+**LLM endpoint:** `#{base_url}`
+**Model:** `#{model_id}`
+""")
+```
+
+## 2. Verify connection
+
+A quick /v1/models ping before sending chat traffic.
+
+```elixir
+base = base_url |> String.replace(~r|/v1$|, "")
+
+case Req.get(base <> "/v1/models") do
+  {:ok, %{status: 200, body: body}} ->
+    ids = get_in(body, ["data"]) |> List.wrap() |> Enum.map(& &1["id"])
+    Kino.Markdown.new("**Models available:** " <> Enum.join(ids, ", "))
+  other ->
+    Kino.Markdown.new("**Connection error:** " <> inspect(other))
+end
+```
+
+## 3. Interactive prompt
+
+Type a prompt and click **Send** — the response renders below the form.
+
+```elixir
+form = Kino.Control.form(
+  [prompt: Kino.Input.textarea("Prompt", default: "Say hello from my local LLM!")],
+  submit: "Send"
+)
+
+frame = Kino.Frame.new()
+
+Kino.listen(form, fn %{data: %{prompt: prompt}} ->
+  model = %{provider: :openai, id: model_id, base_url: base_url}
+
+  Kino.Frame.render(frame, Kino.Text.new("Thinking..."))
+
+  result =
+    case ReqLLM.generate_text(model, prompt) do
+      {:ok, resp}   -> Kino.Markdown.new("#{inspect resp}")
+      {:error, err} -> Kino.Markdown.new("**Error:** `#{inspect(err)}`")
+    end
+
+  Kino.Frame.render(frame, result)
+end)
+
+Kino.Layout.grid([form, frame], boxed: true)
+```
