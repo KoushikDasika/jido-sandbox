@@ -7,11 +7,14 @@ services:
       LLM_BASE_URL: http://host.docker.internal:8080/v1
       LLM_MODEL: unsloth/Qwen3.6-35B-A3B-MTP-GGUF:UD-Q4_K_XL
       OPENAI_API_KEY: local-dummy
+      AGENT_BROWSER_ARGS: "--no-sandbox"
     network_mode: host
     volumes:
       - ./lib:/app/lib:cached
       - ./config:/app/config:cached
       - ./notebooks:/app/notebooks:cached
+      - ./priv:/app/priv:cached
+      - ./test:/app/test:cached
     depends_on:
       - livebook
 

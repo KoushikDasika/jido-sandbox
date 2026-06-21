@@ -7,13 +7,15 @@ defmodule JidoSandbox.MixProject do
       version: "0.1.0",
       elixir: "~> 1.19",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      compilers: Mix.compilers()
     ]
   end
 
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
+      mod: {JidoSandbox, []},
       extra_applications: [:logger]
     ]
   end
@@ -21,13 +23,20 @@ defmodule JidoSandbox.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      # Jido ecosystem
       {:jido, "~> 2.3"},
       {:jido_ai, "~> 2.2"},
-      {:req_llm, "~> 1.15"},
       {:jido_browser, "~> 2.1"},
+      {:req_llm, "~> 1.15"},
       {:light_cdp, "~> 0.2.1"},
       {:lightpanda_ex, "~> 0.1.0"},
-      {:kino, "~> 0.14"}
+      {:kino, "~> 0.14"},
+      # Phoenix
+      {:phoenix, "~> 1.8"},
+      {:phoenix_html, "~> 4.0"},
+      {:phoenix_live_view, "~> 1.2"},
+      {:phoenix_live_reload, "~> 1.6", only: :dev},
+      {:bandit, "~> 1.6"}
     ]
   end
 end
