@@ -8,7 +8,8 @@ defmodule JidoSandbox.MixProject do
       elixir: "~> 1.19",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      compilers: Mix.compilers()
+      compilers: Mix.compilers(),
+      test_files: [test: "test/**/*_test.exs"]
     ]
   end
 
@@ -36,6 +37,7 @@ defmodule JidoSandbox.MixProject do
       {:phoenix_html, "~> 4.0"},
       {:phoenix_live_view, "~> 1.2"},
       {:phoenix_live_reload, "~> 1.6", only: :dev},
+      {:lazy_html, ">= 0.1.0", only: :test},
       {:bandit, "~> 1.6"}
     ]
   end
